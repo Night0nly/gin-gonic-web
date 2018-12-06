@@ -18,10 +18,22 @@ func NewSongResultPool(
 	}
 }
 
+type Result struct {
+	CollectorType domain.CollectorType
+	SongList      *domain.SongList
+}
+
+func NewResult(collectorType domain.CollectorType, list *domain.SongList) *Result {
+	return &Result{
+		CollectorType: collectorType,
+		SongList:      list,
+	}
+}
+
 func (s *SongResultPool) GetSongListByName(songName string) (*domain.SongCollectorMap, error) {
 	resultSongMap := domain.EmptySongCollectorMap()
 
-	collectorChan := make(chan domain.CollectorType, len(s.collectorList))
+	resultChan := make(chan Result, len(s.collectorList))
 	errorChan := make(chan error, len(s.collectorList))
 
 	for _, collector := range s.collectorList {
@@ -30,8 +42,7 @@ func (s *SongResultPool) GetSongListByName(songName string) (*domain.SongCollect
 			if err != nil {
 				errorChan <- err
 			}
-			resultSongMap.Add(collector.GetCollectorType(), &songList)
-			collectorChan <- collector.GetCollectorType()
+			resultChan <- *NewResult(collector.GetCollectorType(), &songList)
 		}(collector)
 	}
 
@@ -39,7 +50,8 @@ func (s *SongResultPool) GetSongListByName(songName string) (*domain.SongCollect
 		select {
 		case err := <-errorChan:
 			return nil, errors.Wrap(err, "Error fetching song from collector")
-		case <-collectorChan:
+		case result := <-resultChan:
+			resultSongMap.Add(result.CollectorType, result.SongList)
 			if len(*resultSongMap) == len(s.collectorList) {
 				return resultSongMap, nil
 			}
