@@ -7,7 +7,7 @@ RUN make all
 
 FROM alpine:latest
 COPY --from=build-env /app/exec-file /usr/local/bin/exec-file
-ENTRYPOINT ["/usr/local/bin/exec-file"]c
+ENTRYPOINT ["/usr/local/bin/exec-file"]
 
 
 
