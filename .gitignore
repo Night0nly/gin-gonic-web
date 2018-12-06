@@ -1,5 +1,5 @@
-vendor/
-tmp/
-dist/
-node_modules/
-bin/
+**/vendor/
+**/tmp/
+**/dist/
+**/node_modules/
+**/bin/
