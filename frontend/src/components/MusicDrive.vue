@@ -25,7 +25,9 @@
         </b-list-group>
       </div>
       <div class="col-4 download-list">
-        <b-list-group v-for="song in songs">
+      </div>
+      <div class="col-4 drive-list">
+        <b-list-group v-for="song in driveSongs">
           <b-list-group-item href="#some-link">
             <div class="d-flex w-100 justify-content-between">
               <h5 class="mb-1">{{ song.Name }}</h5>
@@ -49,6 +51,14 @@
         response: [],
         songKey: '',
         errors: [],
+        driveSongs: [{
+          "Name": "Đếm Ngày Xa Em",
+          "Author": "OnlyC; Lou Hoàng",
+          "Quality": "Lossless",
+          "Url": "http://mp3.chiasenhac.vn/mp3/vietnam/v-pop/dem-ngay-xa-em~onlyc-lou-hoang~tsvtbq63qfqekw.html",
+          "Length": "4:15"
+        }
+        ],
         songs: [{
           "Name": "Đếm Ngày Xa Em",
           "Author": "OnlyC; Lou Hoàng",
@@ -59,18 +69,21 @@
         ]
       }
     },
-    mounted() {
-      let saveToDriveScript = document.createElement('script')
-      saveToDriveScript.setAttribute('src', 'https://apis.google.com/js/platform.js')
-      saveToDriveScript.async = true
-      saveToDriveScript.defer = true
-      document.head.appendChild(saveToDriveScript)
+    created() {
+      AXIOS.get("/base-data")
+        .then(response => {
+          this.driveSongs = response.data["2"]
+        })
+        .catch(e => {
+          this.errors.push(e)
+        })
     },
     methods: {
       findSong() {
         AXIOS.get(`/song?songname=` + this.songKey)
           .then(response => {
             this.songs = response.data["0"]
+            this.driveSongs = response.data["2"]
           })
           .catch(e => {
             this.errors.push(e)

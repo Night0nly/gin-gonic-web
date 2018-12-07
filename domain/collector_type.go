@@ -5,6 +5,7 @@ type CollectorType int
 const (
 	CHIASENHAC CollectorType = iota
 	MP3ZING
+	GOOGLEDRIVE
 )
 
 func (s CollectorType) String() string {
@@ -13,6 +14,8 @@ func (s CollectorType) String() string {
 		return "CHIASENHAC"
 	case MP3ZING:
 		return "MP3ZING"
+	case GOOGLEDRIVE:
+		return "GOOGLEDRIVE"
 	}
 	return "Unknown"
 }

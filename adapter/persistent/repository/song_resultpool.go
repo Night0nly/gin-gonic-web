@@ -38,7 +38,7 @@ func (s *SongResultPool) GetSongListByName(songName string) (*domain.SongCollect
 
 	for _, collector := range s.collectorList {
 		go func(collector service.Collector) {
-			songList, err := collector.Search(songName)
+			songList, err := collector.GetSongList(songName)
 			if err != nil {
 				errorChan <- err
 			}

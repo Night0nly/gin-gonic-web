@@ -1,36 +1,40 @@
 package controller
 
 import (
-	"net/http"
-
 	"github.com/gin-gonic/gin"
 	"github.com/mediadotech/FY2018_2H_fp_team_training_hung/gin-gonic-web/adapter/persistent/repository"
-	"github.com/mediadotech/FY2018_2H_fp_team_training_hung/gin-gonic-web/adapter/persistent/service"
-	service2 "github.com/mediadotech/FY2018_2H_fp_team_training_hung/gin-gonic-web/infrastructure/service"
 	"github.com/mediadotech/FY2018_2H_fp_team_training_hung/gin-gonic-web/usecase/interactor"
+	"net/http"
 )
 
 type SongController struct {
 	interactor *interactor.SongSearch
-	context    *gin.Context
 }
 
-func NewSongController(context *gin.Context) *SongController {
-	collectorList := service.EmptyColectorList()
-	collectorList.Add(service2.NewChiasenhacCollector())
+func NewSongController(songResultPool *repository.SongResultPool) *SongController {
 	return &SongController{
-		interactor: interactor.NewSongSearch(repository.NewSongResultPool(*collectorList)),
-		context:    context,
+		interactor: interactor.NewSongSearch(songResultPool),
 	}
 }
 
-func (s *SongController) SearchSongByName() {
-	songMap, err := s.interactor.SearchByName(s.context.Query("songname"))
+func (s *SongController) SearchSongByName(context *gin.Context) {
+	songMap, err := s.interactor.SearchByName(context.Query("songname"))
 	if err != nil {
-		s.context.JSON(500, gin.H{
-			"message": err,
+		context.JSON(500, gin.H{
+			"message": err.Error(),
 		})
 		return
 	}
-	s.context.JSON(http.StatusOK, songMap)
+	context.JSON(http.StatusOK, songMap)
+}
+
+func (s *SongController) GetAllSong(context *gin.Context) {
+	songMap, err := s.interactor.SearchByName("")
+	if err != nil {
+		context.JSON(500, gin.H{
+			"message": err.Error(),
+		})
+		return
+	}
+	context.JSON(http.StatusOK, songMap)
 }

@@ -125,6 +125,19 @@
   revision = "4ed8d59d0b35e1e29334a206d1b3f38b1e5dfb31"
 
 [[projects]]
+  branch = "master"
+  digest = "1:dbeda1206004397744f88fa9da8b6ed4e0a98209a1d6c1a2e8603c9c1e29a3bd"
+  name = "google.golang.org/api"
+  packages = [
+    "drive/v3",
+    "gensupport",
+    "googleapi",
+    "googleapi/internal/uritemplates",
+  ]
+  pruneopts = ""
+  revision = "6142e720c068c6cd71f2258e007ff1991572e1d5"
+
+[[projects]]
   digest = "1:dd549e360e5a8f982a28c2bcbe667307ceffe538ed9afc7c965524f1ac285b3f"
   name = "gopkg.in/go-playground/validator.v8"
   packages = ["."]
@@ -149,6 +162,7 @@
     "github.com/gin-gonic/contrib/static",
     "github.com/gin-gonic/gin",
     "github.com/pkg/errors",
+    "google.golang.org/api/drive/v3",
   ]
   solver-name = "gps-cdcl"
   solver-version = 1

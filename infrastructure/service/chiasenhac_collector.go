@@ -2,6 +2,7 @@ package service
 
 import (
 	"github.com/PuerkitoBio/goquery"
+	"github.com/mediadotech/FY2018_2H_fp_team_training_hung/gin-gonic-web/adapter/persistent/service"
 	"github.com/mediadotech/FY2018_2H_fp_team_training_hung/gin-gonic-web/domain"
 	"github.com/pkg/errors"
 	"net/http"
@@ -13,6 +14,7 @@ import (
 const ChiasenhacBaseURL = "http://search.chiasenhac.vn/search.php?s="
 
 type ChiasenhacCollector struct {
+	service.Collector
 	baseURL string
 }
 
@@ -22,7 +24,10 @@ func NewChiasenhacCollector() *ChiasenhacCollector {
 	}
 }
 
-func (c *ChiasenhacCollector) Search(query string) (domain.SongList, error) {
+func (c *ChiasenhacCollector) GetSongList(query string) (domain.SongList, error) {
+	if query == ""{
+		return nil, nil
+	}
 	doc := c.fetchFromInternet(c.baseURL + strings.Replace(query, " ", "%20", -1))
 	songList := c.parseSearchResultDoc(*doc)
 	if len(songList) < 1 {

@@ -8,6 +8,10 @@ type Song struct {
 	DownloadUrl DownloadURLList
 }
 
+func NewSongWithName(name string) *Song {
+	return NewSong(name, "unknown", "unknown", "unknown", nil)
+}
+
 func NewSong(name, author, length, url string, downloadUrl DownloadURLList) *Song {
 	return &Song{
 		Name:        name,
