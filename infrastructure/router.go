@@ -8,6 +8,7 @@ import (
 	"github.com/mediadotech/FY2018_2H_fp_team_training_hung/gin-gonic-web/adapter/persistent/repository"
 	"github.com/mediadotech/FY2018_2H_fp_team_training_hung/gin-gonic-web/adapter/persistent/service"
 	service2 "github.com/mediadotech/FY2018_2H_fp_team_training_hung/gin-gonic-web/infrastructure/service"
+	"os"
 )
 
 type Router struct {
@@ -26,15 +27,17 @@ func NewRouter() *Router {
 	}
 }
 
-func (s *Router) Run() {
-	s.router.Use(static.Serve("/", static.LocalFile("./frontend/dist", true)))
+func (r *Router) Run() {
+	os.Remove("./token.json")
+
+	r.router.Use(static.Serve("/", static.LocalFile("./frontend/dist", true)))
 
 	collectorList := service.EmptyCollectorList()
 	collectorList.Add(service2.NewGoogleDriveCollector())
 	collectorList.Add(service2.NewChiasenhacCollector())
 	songController := controller.NewSongController(repository.NewSongResultPool(*collectorList))
 
-	api := s.router.Group("/api")
+	api := r.router.Group("/api")
 
 	api.GET("/base-data", func(context *gin.Context) {
 		songController.GetAllSong(context)
@@ -45,13 +48,13 @@ func (s *Router) Run() {
 	})
 
 	//Google
-	googleLoginController := controller.NewGoogleLoginController()
+	googleLoginController, _ := controller.NewGoogleLoginController()
 	api.GET("/login/google", func(context *gin.Context) {
-		googleLoginController.RedirectToGoogleProvider()
+		googleLoginController.RedirectToGoogleProvider(context)
 	})
 	api.GET("/login/google/callback", func(context *gin.Context) {
-		googleLoginController.HandleProviderCallBack()
+		googleLoginController.HandleProviderCallBack(context)
 	})
 
-	s.router.Run(":8088")
+	r.router.Run(":8088")
 }

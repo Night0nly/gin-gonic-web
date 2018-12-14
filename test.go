@@ -70,7 +70,7 @@ func saveToken(path string, token *oauth2.Token) {
 }
 
 func main() {
-	b, err := ioutil.ReadFile("credentials.json")
+	b, err := ioutil.ReadFile("google-credentials.json")
 	if err != nil {
 		log.Fatalf("Unable to read client secret file: %v", err)
 	}

@@ -32,7 +32,7 @@ func (s *SongController) GetAllSong(context *gin.Context) {
 	songMap, err := s.interactor.SearchByName("")
 	if err != nil {
 		context.JSON(500, gin.H{
-			"message": err.Error(),
+			"connectedToGG": false,
 		})
 		return
 	}
