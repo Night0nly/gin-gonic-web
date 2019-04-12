@@ -117,3 +117,4 @@ func (c *ChiasenhacCollector) getDownloadList(url string) domain.DownloadURLList
 
 	return *downloadList
 }
+

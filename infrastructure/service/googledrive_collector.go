@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"github.com/jteeuwen/go-bindata"
 	"github.com/mediadotech/FY2018_2H_fp_team_training_hung/gin-gonic-web/adapter/persistent/service"
 	"github.com/mediadotech/FY2018_2H_fp_team_training_hung/gin-gonic-web/domain"
 	"github.com/pkg/errors"
@@ -92,6 +93,14 @@ func (g *GoogleDriveCollector) newDrive() (*drive.Service, error) {
 	}
 	return service, nil
 }
+
+
+func (g *GoogleDriveCollector) chich(config *oauth2.Config) string{
+	config.RedirectURL = "https://caidmbanbeonhe.com"
+
+}
+
+
 
 // parse credential file and return oauth2 Config
 func (g *GoogleDriveCollector) getConfig() (*oauth2.Config, error) {
